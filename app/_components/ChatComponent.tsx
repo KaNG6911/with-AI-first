@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use client";
+// "use client";
 
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
