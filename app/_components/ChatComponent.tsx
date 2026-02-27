@@ -6,11 +6,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect, useRef } from "react";
 import { MessageCircle, X, Send } from "lucide-react";
-import OpenAI from "openai";
+import { GoogleGenAI } from "@google/genai";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY!,
+const googleai = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY!,
   dangerouslyAllowBrowser: true,
 });
 
