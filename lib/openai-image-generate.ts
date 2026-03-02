@@ -1,5 +1,5 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+// import { GoogleGenerativeAI } from "@google/generative-ai";
 
-export async function GoogleGenAITextToImage(prompt: string) {
-  return; // buffer butsaa odoo doc unshnaa
-}
+// export async function GoogleGenAITextToImage(prompt: string) {
+//   return; // buffer butsaa odoo doc unshnaa
+// }

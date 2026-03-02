@@ -1,9 +1,9 @@
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import { GoogleGenAI } from "@google/genai";
 
-const apiKey = process.env.GEMINI_API_KEY
+const apiKey = process.env.GEMINI_API_KEY;
 
 if (!apiKey) {
-  throw new Error('Missing GEMINI_API_KEY in .env')
+  throw new Error("Missing GEMINI_API_KEY");
 }
 
-export const genAI = new GoogleGenerativeAI(apiKey)
+export const ai = new GoogleGenAI({ apiKey });

@@ -37,9 +37,11 @@ export const FoodGeneration = () => {
 
       const data = await res.json()
 
-      if (!res.ok) {
-        throw new Error(data.error || 'API error')
-      }
+   if (!res.ok) {
+  console.error("API ERROR:", data)
+  throw new Error(data.error || JSON.stringify(data))
+}
+
 
       setResultImage(data.image ? `data:image/png;base64,${data.image}` : null)
 
