@@ -1,39 +1,62 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Loader2 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
+import { Loader2 } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
 
 export const FoodGeneration = () => {
   const [prompt, setPrompt] = useState<string>(
-    "I just made a delicious plate of Spaghetti Carbonara using spaghetti, eggs, Parmesan cheese, pancetta, black pepper, garlic, and a pinch of salt. The sauce was rich and creamy without using any cream, thanks to the eggs and cheese. The pancetta added a perfect salty crunch, and the garlic brought everything together. It's one of those simple yet satisfying meals that always hits the spot.",
-  );
-  const [resultImage, setResultImage] = useState<string | null>(null);
-  const [extractedInfo, setExtractedInfo] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+    "I just made a delicious plate of Spaghetti Carbonara using spaghetti, eggs, Parmesan cheese, pancetta, black pepper, garlic, and a pinch of salt. The sauce was rich and creamy without using any cream, thanks to the eggs and cheese. The pancetta added a perfect salty crunch, and the garlic brought everything together. It's one of those simple yet satisfying meals that always hits the spot."
+  )
+  const [resultImage, setResultImage] = useState<string | null>(null)
+  const [extractedInfo, setExtractedInfo] = useState<string[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
 
   const generateImageAndExtract = async () => {
     if (!prompt.trim()) {
-      setError("Please enter a prompt first");
-      return;
+      setError('Please enter a prompt first')
+      return
     }
 
-    setIsLoading(true);
-    setError(null);
-    setResultImage(null);
-    setExtractedInfo([]);
+    setIsLoading(true)
+    setError(null)
+    setResultImage(null)
+    setExtractedInfo([])
 
     try {
+      const res = await fetch('/api/image-generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.error || 'API error')
+      }
+
+      setResultImage(data.image ? `data:image/png;base64,${data.image}` : null)
+
+      setExtractedInfo(
+        data.ingredients?.map((item: string, index: number) => (
+          <Badge key={index} variant="secondary">
+            {item}
+          </Badge>
+        ))
+      )
     } catch (error) {
-      console.error("Error:", error);
-      setError("Something went wrong. Please try again.");
+      console.error('Error:', error)
+      setError('Something went wrong. Please try again.')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <main className="container max-w-3xl p-4 mx-auto">
@@ -47,18 +70,25 @@ export const FoodGeneration = () => {
           className="min-h-[120px]"
         />
 
-        <Button onClick={generateImageAndExtract} disabled={isLoading || !prompt.trim()} className="w-full" variant={isLoading ? "secondary" : "outline"}>
+        <Button
+          onClick={generateImageAndExtract}
+          disabled={isLoading || !prompt.trim()}
+          className="w-full"
+          variant={isLoading ? 'secondary' : 'outline'}
+        >
           {isLoading ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
               Processing...
             </>
           ) : (
-            "Generate Image & Extract Info"
+            'Generate Image & Extract Info'
           )}
         </Button>
 
-        {error && <div className="p-2 text-red-500 rounded bg-red-50">{error}</div>}
+        {error && (
+          <div className="p-2 text-red-500 rounded bg-red-50">{error}</div>
+        )}
 
         <div className="mt-8">
           {isLoading ? (
@@ -76,7 +106,11 @@ export const FoodGeneration = () => {
               )}
               {resultImage && (
                 <div className="mb-6 overflow-hidden border rounded-lg">
-                  <img src={resultImage || "/placeholder.svg"} alt="Generated image" className="w-full h-auto" />
+                  <img
+                    src={resultImage || '/placeholder.svg'}
+                    alt="Generated image"
+                    className="w-full h-auto"
+                  />
                 </div>
               )}
             </div>
@@ -84,5 +118,5 @@ export const FoodGeneration = () => {
         </div>
       </div>
     </main>
-  );
-};
+  )
+}

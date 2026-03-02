@@ -1,5 +1,5 @@
-import OpenAI from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-export async function openaiTextToImage(prompt: string) {
+export async function GoogleGenAITextToImage(prompt: string) {
   return; // buffer butsaa odoo doc unshnaa
 }
